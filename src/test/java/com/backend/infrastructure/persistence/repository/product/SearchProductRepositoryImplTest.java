@@ -50,6 +50,16 @@ class SearchProductRepositoryImplTest {
     }
 
     @Test
+    void should_returnEmpty_when_getSimilarIds_throwsException() {
+        final var id = "1";
+        BDDMockito.given(productClient.getSimilarIds(id)).willThrow(new ResourceNotFoundException("error"));
+
+        final var result = searchProductRepository.getSimilarIds(id);
+
+        Assertions.assertThat(result).isEmpty();
+    }
+
+    @Test
     void should_returnResult_when_getSimilarIds() {
         final var id = "1";
         final var similarIds = List.of("2", "3", "4");

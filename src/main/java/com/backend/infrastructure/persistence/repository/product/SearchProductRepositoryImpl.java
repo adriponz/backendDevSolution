@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,11 @@ class SearchProductRepositoryImpl implements SearchProductRepository {
 
     @Override
     public List<String> getSimilarIds(String id) {
-        return productClient.getSimilarIds(id);
+        try {
+            return productClient.getSimilarIds(id);
+        } catch (Exception ex) {
+            log.error(String.format("Error trying to get similars of product with id=%s. %s", id, ex.getMessage()), ex);
+            return Collections.emptyList();
+        }
     }
 }
